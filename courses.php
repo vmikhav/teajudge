@@ -20,7 +20,6 @@ $courses = array();
 foreach ($assignCourses as $course) {
 	if ($course['endTime']<=time()){continue;}
 	$time = intval($course['endTime']) - time();
-	$time = formatTime($time);
 	$courses[] = array('cid' => $course['cid'], 'own' => 0, 'status' => $course['tcount']==$course['rcount']?0:1, 'cname' => $course['cname'], 'endTime' => $course['endTime'], 'tcount' => $course['tcount'], 'rcount' => $course['rcount'], 'time' => $time);
 }
 foreach ($ownCourses as $course) {
