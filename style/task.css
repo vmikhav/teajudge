@@ -1,0 +1,111 @@
+
+
+.mCSB_container_wrapper{
+	margin-right: 0;
+}
+
+/*.ace_marker-layer .ace_selection {
+	opacity: 0.4;
+}
+/*.ace_cursor {
+	color: rgba(197, 200, 198, 0.5);
+}*/
+
+
+
+.taskName{
+	display: inline-block;
+}
+#globalContainer{
+	height: 100%;
+	width: 100%;
+	
+	min-width: 960px; 
+	min-height: 580px;
+}
+
+.leftPanel{
+	width: calc(45% - 15px);
+	height: calc(100% - 60px);
+	margin-left: 15px;
+	float: left;
+}
+#taskText{
+	padding-left: 15px;
+}
+.rightPanel{
+	width: calc(54% - 15px);
+	height: calc(100% - 60px);
+	float: right;
+	margin-left: 1%;
+	margin-right: 15px;
+}
+#tree{
+	width: 300px;
+	height: 300px;
+	overflow-y: auto;
+}
+.panelTop{
+	width: 100%;
+	height: 50px;
+	background-color: rgba(0,0,0,0.2);
+}
+.panelName{
+	height: 100%;
+	display: inline-block;
+	text-align: center;
+	line-height: 50px;
+	font-size: 15px;
+	margin-left: 20px;
+}
+#taskTime{
+	float: right;
+	margin-right: 20px;
+}
+.leftPanelContent{
+	background-color: rgba(0,0,0,0.2);
+	border-top: 3px solid #303133;
+	height: calc(100% - 63px);
+}
+#editor, #log{
+	background-color: rgb(19, 20, 20);
+	margin-bottom: 15px;
+}
+#editor{
+	width: 100%;
+	height: calc(60% - 65px);
+}
+#log{ 
+	width: calc(100% - 4px);
+	height: calc(40% - 65px);
+	border: 2px solid rgb(19, 20, 20);
+	margin: 0;
+}
+#logText{
+	margin: 20px;
+	padding-right: 20px;
+}
+details, summary{outline:none;}
+#logText > p{margin-left: 15px;}
+details > p{margin-left: 30px;}
+.greenText	{color: #43a047;}
+.redText	{color: #c62828;}
+
+
+a{color:white;}
+table {
+	word-wrap: break-word; 
+	table-layout:fixed;
+	width: 100%;
+	border-collapse: collapse;
+}
+th{
+	padding: 10px 8px;
+	border-bottom: 2px solid #666;
+}
+td{
+	border-bottom: 1px solid #444;
+	padding: 6px 8px;
+	vertical-align: top;
+}
+/*pre{tab-size:4; margin-left: 20px;}*/
