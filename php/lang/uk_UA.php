@@ -53,7 +53,7 @@ define('USER_FILTER_PLACEHOLDER', 'Ім\'я користувача чи назв
 define('GROUP_FILTER_PLACEHOLDER', 'Назва групи...');
 define('NAME', 'Ім\'я');
 define('GROUP', 'Група');
-define('RESET_PASSWORD', 'Відновити пароль');
+define('RESET_PASSWORD', 'Скинути пароль');
 
 define('PERM_USER', 'Створення користувачів');
 define('PERM_TASK', 'Створення курсів');
