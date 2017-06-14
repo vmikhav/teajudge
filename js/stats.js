@@ -47,7 +47,7 @@ function showStatistic(data, type, isAuthor) {
 
 	formHtml += '</tbody></table></div></div>\
 					<div class="buttonContainer noselect">\
-						<span class="button" id="export"'+LANG['Export']+'</span>\
+						<span class="button" id="export">'+LANG['Export']+'</span>\
 						<span class="button blueButton" id="closePopup">'+LANG['Close']+'</span>\
 					</div>\
 				</div>';

@@ -183,9 +183,10 @@ class Controller
 
 	private function saveCode(){
 		//TODO save history
-		if (isset($_POST['ranges']) && isset($_POST['code']) && isset($_POST['task'])){
+		if (isset($_POST['ranges']) && isset($_POST['code']) && isset($_POST['task']) && isset($_POST['lid'])){
 			$tid = intval($_POST['task']);
-			$data = array("ranges" => $_POST['ranges'], "code" => $_POST['code']);
+			$lid = intval($_POST['lid']);
+			$data = array("ranges" => $_POST['ranges'], "code" => $_POST['code'], "lid" => $lid);
 			echo $this->model->updateTaskProgress($tid, $this->uid, $data);
 		}
 	}

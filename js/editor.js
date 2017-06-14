@@ -122,7 +122,7 @@ function saveCode(){
 	for (var i=0; i<rangeList.length; i++){
 		jranges.push([rangeList[i][0].start.row, rangeList[i][0].start.column, rangeList[i][0].end.row, rangeList[i][0].end.column]);
 	}
-	xhttp.send('lang='+lcode+'&lid='+lid+'&task='+tid+'&code='+encodeURIComponent(editor.getSession().getDocument().getAllLines().join('\n'))+'&ranges='+encodeURIComponent(JSON.stringify(jranges)));
+	xhttp.send('lang='+encodeURIComponent(lcode)+'&lid='+encodeURIComponent(lid)+'&task='+encodeURIComponent(tid)+'&code='+encodeURIComponent(editor.getSession().getDocument().getAllLines().join('\n'))+'&ranges='+encodeURIComponent(JSON.stringify(jranges)));
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			console.log(xhttp.responseText);

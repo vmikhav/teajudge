@@ -490,7 +490,7 @@ class Model
 	public function updateTaskProgress($tid, $uid, $data){
 		if ($this->isTaskAvailable($tid, $uid)){
 			if (count($data) == 3){
-				$this->db->query('UPDATE `user_task` SET `lid`='.intval($data['lid']).' `ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'" WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
+				$this->db->query('UPDATE `user_task` SET `lid`='.intval($data['lid']).', `ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'" WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
 			}
 			else{
 				$this->db->query('UPDATE `user_task` SET `passed`='.intval($data['passed']).',`time`="'.$this->db->real_escape_string($data['time']).'",`memory`="'.$this->db->real_escape_string($data['memory']).'",`status`="'.$this->db->real_escape_string($data['status']).'",`lid`='.intval($data['lid']).',`ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'",`submissionDate`='.time().' WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
