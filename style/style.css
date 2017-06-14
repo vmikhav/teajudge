@@ -495,3 +495,10 @@ pre.no-space {
 		transform: rotate(360deg);
 	}
 }
+
+.mCSB_inside>.mCSB_container{
+	margin-right: 0;
+}
+.mCSB_container_wrapper>.mCSB_container{
+	padding-right: 0;
+}
