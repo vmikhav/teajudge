@@ -28,7 +28,7 @@ Supported interface language : English, Українська, Русский
 
 ### Installation and Usage
 1. Clone repo to \<your_site_directory\>/teajudge (for example */var/www/html/teajudge*)
-1. Exec `sudo ./install.sh`
+1. Exec `sudo bash ./install.sh`
 1. Log in as admin : admin
 1. Import accounts of students
 1. Create your own course

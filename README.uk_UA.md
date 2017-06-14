@@ -28,7 +28,7 @@
 
 ### Встановлення та використання
 1. Склонуйте репозиторій у \<your_site_directory\>/teajudge (наприклад */var/www/html/teajudge*)
-1. Виконайте `sudo ./install.sh`
+1. Виконайте `sudo bash ./install.sh`
 1. Авторизуйтесь як admin : admin
 1. Імпортуйте користувачів
 1. Створіть власний курс
