@@ -4,10 +4,12 @@
 	padding: 10px;
 }
 .leftPanel{
-	width: calc(60% - 20px);
+	width: calc(60% - 25px);
+	padding-left: 15px;
 }
 .rightPanel{
-	width: calc(40% - 20px);
+	width: calc(40% - 25px);
+	padding-right: 15px;
 }
 
 .button-1x{
