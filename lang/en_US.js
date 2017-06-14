@@ -36,7 +36,7 @@ var LANG = {
 	'Add_test':"Add test",
 	'Answer_template':"Answer template",
 	'Test':"Test",
-	'Validator':"Valisator",
+	'Validator':"Validator",
 
 	'type_test_name':"enter the name of the test...",
 	'type_validator_name':"enter the name of the validator...",
