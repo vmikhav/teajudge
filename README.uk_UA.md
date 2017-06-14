@@ -19,6 +19,13 @@
 
 Підтримуються наступні мови інтерфейсу : English, Українська, Русский
 
+### Prerequirement
+- Debian / Ubuntu
+- Http-server (apache2, nginx, lighttpd, etc.)
+- PHP 5.6 or higher
+- build-essential
+- python3
+
 ### Встановлення та використання
 1. Склонуйте репозиторій у \<your_site_directory\>/teajudge (наприклад */var/www/html/teajudge*)
 1. Виконайте `sudo ./install.sh`
