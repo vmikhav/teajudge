@@ -44,7 +44,7 @@ class Controller
 				else{
 					$time = time()+60*60*24*365*4;
 				}
-				$en = JWT::encode($token, "teajudge secret");
+				$en = JWT::encode($token, TJSECRET);
 				setcookie("jwt",$en,$time);
 				setcookie("lid",1,$time);
 				echo "ok";
