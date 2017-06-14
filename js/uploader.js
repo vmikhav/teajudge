@@ -145,36 +145,6 @@ function ekUpload(){
 		m.innerHTML = msg;
 	}
 
-	function parseFile(file) {
-
-		console.log(file.name);
-		output(
-			'<strong>' + encodeURI(file.name) + '</strong>'
-		);
-		
-		// var fileType = file.type;
-		// console.log(fileType);
-		var imageName = file.name;
-
-		var isGood = (/\.(?=csv)/gi).test(imageName);
-		if (isGood) {
-			document.getElementById('startd').classList.add("hidden");
-			document.getElementById('response').classList.remove("hidden");
-			document.getElementById('notimage').classList.add("hidden");
-			// Thumbnail Preview
-			document.getElementById('file-image').classList.remove("hidden");
-			document.getElementById('file-image').src = URL.createObjectURL(file);
-			file.parse
-		}
-		else {
-			document.getElementById('file-image').classList.add("hidden");
-			document.getElementById('notimage').classList.remove("hidden");
-			document.getElementById('startd').classList.remove("hidden");
-			document.getElementById('response').classList.add("hidden");
-			document.getElementById("file-upload-form").reset();
-		}
-	}
-
 	// Check for the various File API support.
 	if (window.File && window.FileList && window.FileReader) {
 		Init();
