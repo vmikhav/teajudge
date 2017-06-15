@@ -132,7 +132,8 @@ MathJax.Hub.Config({
 	SVG: { scale: 120, font: "Neo-Euler"}
 });
 </script>
-<script src="./js/MathJax/MathJax.js?config=TeX-AMS_SVG"></script>
+<!--<script src="./js/MathJax/MathJax.js?config=TeX-AMS_SVG"></script>-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG"></script>
 
 <script>
 	var previewText = "";
