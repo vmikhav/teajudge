@@ -10,30 +10,31 @@
 - Вимірювання використаних програмою ресурсів
 - Імпорт користувачів з csv
 - Збір та експорт статистики
-- Автоматична генерація піктограми користувача
 - Відтворення процесу набору відповіді (в розробці)
-
-Підтримуються наступні мови програмування:
-- C/C++
-- Python3
-
-Підтримуються наступні мови інтерфейсу : English, Українська, Русский
+- Підтримуються наступні мови програмування: C/C++, Python3
+- Підтримуються наступні мови інтерфейсу : English, Українська, Русский
 
 ### Prerequirement
 - Debian / Ubuntu
 - http-server (apache2, nginx, lighttpd, etc.)
 - mysql-server
-- PHP 5.6 or higher with extension : mysql, mbstring
-- build-essential
-- python3-dev
 
-### Встановлення та використання
+### Встановлення та Використання
+1. Завантажте [teajudge_0.9-1_all.deb](https://packagecloud.io/sungmaster/teajudge/packages/debian/jessie/teajudge_0.9-1_all.deb)
+1. Виконайте
+  ```bash
+  sudo dpkg -i teajudge_0.9-1_all.deb
+  sudo apt-get -f install
+  ```
+або
 1. Склонуйте репозиторій у \<your_site_directory\>/teajudge (наприклад */var/www/html/teajudge*)
 1. Виконайте `sudo bash ./install.sh`
-1. Авторизуйтесь як admin : admin
-1. Імпортуйте користувачів
-1. Створіть власний курс
-1. Насолоджуйтесь)
+
+потім
+- Авторизуйтесь як admin : admin
+- Імпортуйте користувачів
+- Створіть власний курс
+- Насолоджуйтесь)
 
 ### Залежності
 Дивіться [тут](DEPENDENCIES.md)
