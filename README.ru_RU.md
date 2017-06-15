@@ -20,10 +20,11 @@
 
 ### Prerequirement
 - Debian / Ubuntu
-- Http-server (apache2, nginx, lighttpd, etc.)
-- PHP 5.6 or higher
+- http-server (apache2, nginx, lighttpd, etc.)
+- mysql-server
+- PHP 5.6 or higher with extension : mysql, mbstring
 - build-essential
-- python3
+- python3-dev
 
 ### Installation and Usage
 1. Клонируйте репозиторий в \<your_site_directory\>/teajudge (например */var/www/html/teajudge*)
