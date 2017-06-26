@@ -19,7 +19,9 @@ editor.setOptions({
 });
 session.getDocument().setValue(code);
 session.setUndoManager(new ace.UndoManager());
-
+session.$undoManager.$undoStack = JSON.parse(codeHistory);
+session.$undoManager.dirtyCounter = session.$undoManager.$undoStack.length;
+session.$undoManager.$doc = session;
 
 for (var i = 0; i < ranges.length; i++) {
 	addMarker(new Range(ranges[i][0], ranges[i][1], ranges[i][2], ranges[i][3]));
@@ -27,7 +29,7 @@ for (var i = 0; i < ranges.length; i++) {
 
 editor.keyBinding.addKeyboardHandler({
 	handleKeyboard : function(data, hash, keyString, keyCode, event) {
-		if (hash === -1 || (keyCode <= 40 && keyCode >= 37) || (hash == 1 && keyCode == 67) || keyCode == 120) return false;
+		if (hash === -1 || (keyCode <= 40 && keyCode >= 37) || (hash == 1 && (keyCode == 67 || keyCode == 90 || keyCode == 89 || keyCode == 83) ) || keyCode == 120  || keyCode == 115) return false;
 		if (intersects()) {
 			return {command:"null", passEvent:false};
 		}
@@ -122,7 +124,7 @@ function saveCode(){
 	for (var i=0; i<rangeList.length; i++){
 		jranges.push([rangeList[i][0].start.row, rangeList[i][0].start.column, rangeList[i][0].end.row, rangeList[i][0].end.column]);
 	}
-	xhttp.send('lang='+encodeURIComponent(lcode)+'&lid='+encodeURIComponent(lid)+'&task='+encodeURIComponent(tid)+'&code='+encodeURIComponent(editor.getSession().getDocument().getAllLines().join('\n'))+'&ranges='+encodeURIComponent(JSON.stringify(jranges)));
+	xhttp.send('lang='+encodeURIComponent(lcode)+'&lid='+encodeURIComponent(lid)+'&task='+encodeURIComponent(tid)+'&code='+encodeURIComponent(editor.getSession().getDocument().getAllLines().join('\n'))+'&ranges='+encodeURIComponent(JSON.stringify(jranges))+'&history='+encodeURIComponent(JSON.stringify(session.$undoManager.$undoStack)));
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			console.log(xhttp.responseText);
@@ -144,7 +146,7 @@ function execCode(){
 	for (var i=0; i<rangeList.length; i++){
 		jranges.push([rangeList[i][0].start.row, rangeList[i][0].start.column, rangeList[i][0].end.row, rangeList[i][0].end.column]);
 	}
-	xhttp.send('lang='+lcode+'&lid='+lid+'&task='+tid+'&code='+encodeURIComponent(editor.getSession().getDocument().getAllLines().join('\n'))+'&ranges='+encodeURIComponent(JSON.stringify(jranges)));
+	xhttp.send('lang='+lcode+'&lid='+lid+'&task='+tid+'&code='+encodeURIComponent(editor.getSession().getDocument().getAllLines().join('\n'))+'&ranges='+encodeURIComponent(JSON.stringify(jranges))+'&history='+encodeURIComponent(JSON.stringify(session.$undoManager.$undoStack)));
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			console.log(xhttp.responseText);
@@ -196,5 +198,10 @@ editor.commands.addCommand({
 	name: 'run',
 	bindKey: {win: "F9", "mac": "F9"},
 	exec: execCode
+})
+editor.commands.addCommand({
+	name: 'save',
+	bindKey: {win: "Ctrl-S", "mac": "Cmd-S"},
+	exec: saveCode
 })
 document.addEventListener("keyup",function(e){if (e.keyCode==120) {execCode();}},false);

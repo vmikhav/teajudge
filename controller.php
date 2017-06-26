@@ -1,9 +1,9 @@
 <?php 
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+*/
 if (!isset($_GET['act'])){ die();}
 
 $teajudgeset = 1;
@@ -12,6 +12,7 @@ $noRedirect = 1;
 
 include_once './php/check_auth.php';
 include_once './php/model.php';
+include_once './php/compare_code.php';
 
 class Controller
 {
@@ -182,11 +183,10 @@ class Controller
 	}
 
 	private function saveCode(){
-		//TODO save history
-		if (isset($_POST['ranges']) && isset($_POST['code']) && isset($_POST['task']) && isset($_POST['lid'])){
+		if (isset($_POST['ranges']) && isset($_POST['code']) && isset($_POST['task']) && isset($_POST['lid']) && isset($_POST['history'])){
 			$tid = intval($_POST['task']);
 			$lid = intval($_POST['lid']);
-			$data = array("ranges" => $_POST['ranges'], "code" => $_POST['code'], "lid" => $lid);
+			$data = array("ranges" => $_POST['ranges'], "code" => $_POST['code'], "lid" => $lid, "history" => $_POST['history']);
 			echo $this->model->updateTaskProgress($tid, $this->uid, $data);
 		}
 	}
@@ -258,6 +258,12 @@ class Controller
 	private function changeGroupRole(){
 		if (isset($_POST['gid']) && isset($_POST['role'])){
 			echo $this->model->changeGroupRole(intval($_POST['gid']), json_decode($_POST['role']), $this->uid);
+		}
+	}
+
+	private function compareCode(){
+		if (isset($_POST['tid']) && isset($_POST['luid']) && isset($_POST['ruid'])){
+			echo json_encode(compareCode($this->model, intval($_POST['tid']), $this->uid, intval($_POST['luid']), intval($_POST['ruid']) ));
 		}
 	}
 }

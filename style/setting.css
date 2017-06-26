@@ -108,6 +108,9 @@ th label {
 	display: block;
 	margin: 10px 0;
 }
+.ulist tr{
+	cursor: pointer;
+}
 
 .uploader {
 	position: relative;

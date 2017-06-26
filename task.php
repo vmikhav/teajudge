@@ -172,6 +172,7 @@ MathJax.Hub.Config({
 	}
 	
 	var code = "<?=$task['pattern']?>";
+	var codeHistory = "<?=$task['history']==''?'[]':addslashes($task['history'])?>";
 	var ranges = JSON.parse("<?=$task['ranges']?>");
 
 	var lid = <?=$task['lid']?>;

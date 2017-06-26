@@ -10,5 +10,6 @@
 - [highlight.js](https://github.com/isagalaev/highlight.js)
 - [MathJax](https://github.com/mathjax/MathJax)
 - [Showdown](https://github.com/showdownjs/showdown)
+- [diff2html](https://github.com/rtfpessoa/diff2html)
 - [mCustomScrollbar](https://github.com/malihu/malihu-custom-scrollbar-plugin)
 - [bootstrap-material-datetimepicker](https://github.com/T00rk/bootstrap-material-datetimepicker)

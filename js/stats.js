@@ -16,7 +16,7 @@ function download(filename, text) {
 	document.body.removeChild(element);
 }
 
-function showStatistic(data, type, isAuthor) {
+function showStatistic(data, type, isAuthor, id) {
 	var addClass = isAuthor&&type==1?'name-cursor':'';
 	var formHtml = '<div class="dialogContainer">\
 						<div class="ct-chart"></div>\
@@ -45,12 +45,23 @@ function showStatistic(data, type, isAuthor) {
 		}
 	}
 
-	formHtml += '</tbody></table></div></div>\
+	if (isAuthor && type==1 && data[2].length>1){
+		formHtml += '</tbody></table></div></div>\
 					<div class="buttonContainer noselect">\
 						<span class="button" id="export">'+LANG['Export']+'</span>\
+						<span class="button" id="compare"><a href="./compare.php?tid='+id+'" target="_blank">'+LANG['Compare']+'</a></span>\
 						<span class="button blueButton" id="closePopup">'+LANG['Close']+'</span>\
 					</div>\
 				</div>';
+	}
+	else {
+		formHtml += '</tbody></table></div></div>\
+						<div class="buttonContainer noselect">\
+							<span class="button" id="export">'+LANG['Export']+'</span>\
+							<span class="button blueButton" id="closePopup">'+LANG['Close']+'</span>\
+						</div>\
+					</div>';
+	}	
 
 	$("#frontDiv").html(formHtml).show();
 	$(".dialogContainer").mCustomScrollbar({scrollbarPosition:"outside", axis:"y", theme:"rounded", autoExpandScrollbar:true, mouseWheel:{scrollAmount:150,normalizeDelta:true}});
@@ -103,10 +114,16 @@ function showStatistic(data, type, isAuthor) {
 
 	$(".name-cursor").click(function(){
 		var uid = $(this).attr('uid');
+		var currCode = {code: codes[uid][2].split("\n"), step: 0};
+		var currHistory = codes[uid][1];
 		$("body").append('<div class="FullPage popupFilter" id="previewDiv">\
 							<div class="dialogContainer" id="previewDialog">\
 								<div class="previewText" id="ptext">\
 									<pre><code>'+''+'</code></pre>\
+								</div>\
+								<div class="resourses frameresourses">\
+									<span class="framecontrol"><i class="fa fa-2x fa-play-circle" id="framebutton" aria-hidden="true"></i></span>\
+									<div class="range framerange" id="framerange"></div>\
 								</div>\
 								<div class="buttonContainer noselect">\
 									<span class="button" id="closePreview">'+LANG['Close']+'</span>\
@@ -115,10 +132,77 @@ function showStatistic(data, type, isAuthor) {
 						</div>');
 		$('pre code').text(codes[uid][0]).each(function(i, block) {hljs.highlightBlock(block);});
 
-		setTimeout( function(){$("#previewDialog").mCustomScrollbar({scrollbarPosition:"outside", axis:"y", theme:"light-thin", autoHideScrollbar:true, mouseWheel:{scrollAmount:200,normalizeDelta:true}})}, 500);
-		$("#closePreview").click(function(){$("#previewDiv").remove();});
-		$("#previewDiv").click(function(){$("#previewDiv").remove();});
+		$("#ptext").mCustomScrollbar({scrollbarPosition:"outside", axis:"y", theme:"light-thin", mouseWheel:{scrollAmount:200,normalizeDelta:true}});
+		
+		var interval = 0; var frame = currHistory.length+1;
+
+		function displayStep(step){
+			makeChanges(step);
+			$('pre code').text(currCode.code.join("\n")).each(function(i, block) {hljs.highlightBlock(block);});
+		}
+
+		function makeChanges(step){
+			var currRow = "";
+			var tmpLines = [];
+			if (step < currCode.step){
+				currCode.step = 0; currCode.code = codes[uid][2].split("\n");
+			}
+			for (var i=currCode.step; i<step; i++ ){
+				for (var j=0; j<currHistory[i].length; j++){
+					if (currHistory[i][j].action=="insert"){
+						currRow = currCode.code[currHistory[i][j].start.row];
+						tmpLines = [currRow.substr(0, currHistory[i][j].start.column) + currHistory[i][j].lines[0]];
+						for (var k=1; k<currHistory[i][j].lines.length; k++){
+							tmpLines.push(currHistory[i][j].lines[k]);
+						}
+						tmpLines[tmpLines.length - 1] += currRow.substr(currHistory[i][j].start.column);
+						Array.prototype.splice.apply(currCode.code, [currHistory[i][j].start.row, 1].concat(tmpLines));
+					}
+					else if (currHistory[i][j].action=="remove"){
+						currRow = currCode.code[currHistory[i][j].start.row].substr(0, currHistory[i][j].start.column) + currCode.code[currHistory[i][j].end.row].substr(currHistory[i][j].end.column);
+						currCode.code.splice(currHistory[i][j].start.row, currHistory[i][j].lines.length, currRow);
+					}
+				}
+			}
+			currCode.step = step;
+		}
+		function pause(){
+			clearInterval(interval);
+			$("#framebutton.fa-pause-circle").removeClass("fa-pause-circle").addClass("fa-play-circle");
+		}
+
+		$("#framerange").slider({
+			range: "min",
+			min: 0,
+			max: currHistory.length,
+			value: currHistory.length,
+			slide: function(e, ui) {
+				pause();
+				frame = ui.value;
+				displayStep(frame);
+			}
+		});
+
+		function playback(){
+			if (frame > currHistory.length) {frame = 0;}
+			$("#framebutton.fa-play-circle").removeClass("fa-play-circle").addClass("fa-pause-circle");
+			$("#framerange").slider('value', frame); displayStep(frame); frame++;
+			interval = setInterval(function(){
+				$("#framerange").slider('value', frame);
+				displayStep(frame); frame++;
+				if (frame > currHistory.length){pause();}
+			}, 250);
+		}
+
+		function closePreview(){
+			clearInterval(interval); $("#previewDiv").remove();
+		}
+		$("#closePreview").click(closePreview);
+		$("#previewDiv").click(closePreview);
 		$("#previewDialog").click(function(event){ event.stopPropagation();});
+		$("#framebutton").click(function(){
+			if ($(this).hasClass("fa-play-circle")){ playback(); } else { pause(); }
+		});
 	});
 }
 
@@ -178,7 +262,9 @@ function getStats(id, type){
 						}
 						data[2].push([res[i].results[j].lastName+" "+res[i].results[j].firstName, res[i].results[j].gname, parseInt(res[i].results[j].passed), res[i].results[j].uid]);
 						if (res[i].isAuthor){
-							codes[res[i].results[j].uid] = [res[i].results[j].submissionCode, res[i].results[j].history];
+							codes[res[i].results[j].uid] = [res[i].results[j].submissionCode, 
+								[].concat.apply([], JSON.parse(res[i].results[j].history)).map(function(x){return x.deltas;}),
+								res[i].results[j].pattern];
 						}
 					}
 					else{
@@ -241,7 +327,7 @@ function getStats(id, type){
 				exportData = tempRes;
 			}
 			exportData = Papa.unparse(exportData, {quotes:true, header:false});
-			showStatistic(data, type, res[0].isAuthor);
+			showStatistic(data, type, parseInt(res[0].isAuthor), parseInt(id));
 		}
 	};
 	xhttp.open("POST", "controller.php?act=exportStats", true);

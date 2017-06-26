@@ -1,6 +1,8 @@
 Читайте эту статью на других языках : [English](README.md), [Українська](README.uk_UA.md)
 
 **TeaJudge** - self-hosted веб-среда для проверки навыков программирования для университетов и курсов с программирования. Она обладает следующими возможностями:
+- Воспроизведение набора ответа
+- Сравнение ответов
 - Шаблоны ответов с нередактируемыми участками
 - Разметка условий с использованием LaTeX и Markdown
 - Объединение задач в курсы
@@ -18,10 +20,10 @@
 - mysql-server
 
 ### Установка и Использование
-1. Скачайте [teajudge_0.9-1_all.deb](https://packagecloud.io/sungmaster/teajudge/packages/debian/jessie/teajudge_0.9-1_all.deb)
+1. Скачайте [teajudge_1.0-1_all.deb](https://packagecloud.io/sungmaster/teajudge/packages/debian/stretch/teajudge_1.0-1_all.deb)
 1. Выполните
   ```bash
-  sudo dpkg -i teajudge_0.9-1_all.deb
+  sudo dpkg -i teajudge_1.0-1_all.deb
   sudo apt-get -f install
   ```
 или

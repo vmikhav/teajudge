@@ -72,4 +72,7 @@ define('OUTPUT', 'Output');
 define('TASK_CLOSED', 'Tasks are closed');
 define('LONG_CODE', 'The code is too long');
 
+define('COMPARE', 'Compare');
+define('NODIFF', 'Code is identical');
+
 ?>

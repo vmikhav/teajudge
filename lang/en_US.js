@@ -80,4 +80,6 @@ var LANG = {
 	'Select_file':"Select a file",
 	'Select_csv':"Please select an csv",
 	'Select_or_drag':"Select a file or drag here",
+
+	'Compare':"Compare",
 };

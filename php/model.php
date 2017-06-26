@@ -343,9 +343,12 @@ class Model
 	public function getCourseContent($cid, $uid){
 		$time = time();
 
-		$result = $this->db->query('SELECT cname, '.intval($uid).' = author as isAuthor, COALESCE(MAX(uc.endTime), 0) as endTime, ucount FROM user_course uc JOIN user_group ug ON ug.gid=uc.gid AND ug.uid = '.intval($uid).' AND uc.cid = '.intval($cid).' JOIN course c ON c.cid = uc.cid JOIN (SELECT COUNT(ug.uid) as ucount FROM user_course uc JOIN user_group ug ON uc.gid = ug.gid AND uc.cid = '.intval($cid).' WHERE uc.clearTime > '.$time.' AND uc.startTime < '.$time.') ucc WHERE uc.clearTime > '.$time.' AND uc.startTime < '.$time);
+		$result = $this->db->query('SELECT cname, '.intval($uid).' = author as isAuthor, COALESCE(MAX(uc.endTime), 0) as endTime FROM user_course uc JOIN user_group ug ON ug.gid=uc.gid AND ug.uid = '.intval($uid).' AND uc.cid = '.intval($cid).' JOIN course c ON c.cid = uc.cid AND uc.clearTime > '.$time.' AND uc.startTime < '.$time);
+		$result2 = $this->db->query('SELECT COUNT(ug.uid) as ucount FROM user_course uc JOIN user_group ug ON uc.gid = ug.gid AND uc.cid = '.intval($cid).' WHERE uc.clearTime > '.$time.' AND uc.startTime < '.$time);
 
 		$ares = $result->fetch_assoc();
+		$ares2 = $result2->fetch_assoc();
+		$ares['ucount'] = $ares2['ucount'];
 
 		$fresult = array();
 		if ($ares['isAuthor']==1 || $ares['endTime'] > 0){
@@ -463,7 +466,7 @@ class Model
 					$timet .= ",0"; $memt .= ",0"; $statust .= ',"NA"';
 				}
 				$timet .= "]"; $memt .= "]"; $statust .= "]";
-				$this->db->query('INSERT INTO `user_task`(`uid`, `tid`, `vid`, `passed`, `time`, `memory`, `status`, `lid`, `ranges`, `submissionCode`, `history`, `startDate`, `submissionDate`) VALUES ('.intval($uid).','.intval($tid).','.$fres2['vid'].',0,"'.$timet.'","'.$memt.'","'.$this->db->real_escape_string($statust).'",'.$fres2['lid'].',"'.$fres2['ranges'].'","'.$this->db->real_escape_string($fres2['pattern']).'","",'.$time.','.$time.')');
+				$this->db->query('INSERT INTO `user_task`(`uid`, `tid`, `vid`, `passed`, `time`, `memory`, `status`, `lid`, `ranges`, `submissionCode`, `history`, `startDate`, `submissionDate`) VALUES ('.intval($uid).','.intval($tid).','.$fres2['vid'].',0,"'.$timet.'","'.$memt.'","'.$this->db->real_escape_string($statust).'",'.$fres2['lid'].',"'.$fres2['ranges'].'","'.$this->db->real_escape_string($fres2['pattern']).'","[]",'.$time.','.$time.')');
 				return $fres2;
 			}
 		}
@@ -488,12 +491,12 @@ class Model
 	}
 
 	public function updateTaskProgress($tid, $uid, $data){
-		if ($this->isTaskAvailable($tid, $uid)){
-			if (count($data) == 3){
-				$this->db->query('UPDATE `user_task` SET `lid`='.intval($data['lid']).', `ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'" WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
+		if ($this->isTaskAvailable($tid, $uid)){ 
+			if (count($data) == 4){
+				$this->db->query('UPDATE `user_task` SET `lid`='.intval($data['lid']).', `ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'",`history`="'.$this->db->real_escape_string($data['history']).'" WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
 			}
 			else{
-				$this->db->query('UPDATE `user_task` SET `passed`='.intval($data['passed']).',`time`="'.$this->db->real_escape_string($data['time']).'",`memory`="'.$this->db->real_escape_string($data['memory']).'",`status`="'.$this->db->real_escape_string($data['status']).'",`lid`='.intval($data['lid']).',`ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'",`submissionDate`='.time().' WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
+				$this->db->query('UPDATE `user_task` SET `passed`='.intval($data['passed']).',`time`="'.$this->db->real_escape_string($data['time']).'",`memory`="'.$this->db->real_escape_string($data['memory']).'",`status`="'.$this->db->real_escape_string($data['status']).'",`lid`='.intval($data['lid']).',`ranges`="'.$this->db->real_escape_string($data['ranges']).'",`submissionCode`="'.$this->db->real_escape_string($data['code']).'",`history`="'.$this->db->real_escape_string($data['history']).'",`submissionDate`='.time().' WHERE tid = '.intval($tid).' AND uid = '.intval($uid));
 			}
 			return $this->db->affected_rows;
 		}
@@ -530,12 +533,26 @@ class Model
 			$result = $this->db->query('SELECT tname, t.tid, t.cid, c.cname, c.author = '.intval($uid).' AS isAuthor, testCount, testNames FROM task t JOIN course c ON c.cid=t.cid JOIN variant v ON v.tid = t.tid AND t.cid = '.intval($id));
 		}
 		while ($row = $result->fetch_assoc()) {
-			$tresult = array("cname" => $row["cname"], "isAuthor" => $row["isAuthor"], "tname" => $row["tname"], "testCount" => $row["testCount"], "testNames" => $row["testNames"], "results" => array());
-			$res2 = $this->db->query('SELECT ug.uid, firstName, lastName, gname, passed, `time`, memory, `status`, submissionCode, history, startDate, submissionDate, submissionDate - startDate as duration FROM user_course uc JOIN user_group ug ON uc.gid=ug.gid AND uc.cid = '.$row['cid'].' AND uc.clearTime > '.$time.' AND uc.startTime < '.$time.' JOIN `group` g ON g.gid=ug.gid JOIN `user` u ON u.uid=ug.uid JOIN user_task ut ON ut.uid=ug.uid AND ut.tid='.$row['tid'].' ORDER BY gname, lastName, firstName');
+			$tresult = array("cname" => $row["cname"], "cid" => $row["cid"], "isAuthor" => $row["isAuthor"], "tname" => $row["tname"], "testCount" => $row["testCount"], "testNames" => $row["testNames"], "results" => array());
+			$res2 = $this->db->query('SELECT ug.uid, firstName, lastName, gname, passed, `time`, memory, `status`, submissionCode, history, startDate, submissionDate, submissionDate - startDate as duration, `pattern` FROM user_course uc JOIN user_group ug ON uc.gid=ug.gid AND uc.cid = '.$row['cid'].' AND uc.clearTime > '.$time.' AND uc.startTime < '.$time.' JOIN `group` g ON g.gid=ug.gid JOIN `user` u ON u.uid=ug.uid JOIN user_task ut ON ut.uid=ug.uid AND ut.tid='.$row['tid'].' JOIN `variant_lang` vl ON vl.tid='.$row['tid'].' AND vl.lid=ut.lid ORDER BY gname, lastName, firstName');
 			while ($row2 = $res2->fetch_assoc()){
 				$tresult['results'][] = $row2;
 			}
 			$fresult[] = $tresult;
+		}
+		return $fresult;
+	}
+
+	public function exportCodeToCompare($tid, $uid, $uidL, $uidR){
+		$time = time();
+		$result = $this->db->query('SELECT tname, t.tid, t.cid, c.author = '.intval($uid).' AS isAuthor FROM task t JOIN course c ON c.cid=t.cid JOIN variant v ON v.tid = t.tid AND t.tid = '.intval($tid));
+		$row = $result->fetch_assoc();
+		$fresult = array("isAuthor" => $row["isAuthor"], "results" => array());
+		if (intval($row["isAuthor"]) != 0){
+			$res2 = $this->db->query('SELECT ug.uid, submissionCode FROM user_course uc JOIN user_group ug ON uc.gid=ug.gid AND uc.cid = '.$row['cid'].' AND uc.clearTime > '.$time.' AND uc.startTime < '.$time.' JOIN `group` g ON g.gid=ug.gid JOIN user_task ut ON ut.uid=ug.uid AND ut.tid='.$row['tid'].' WHERE ug.uid = '.intval($uidL).' OR ug.uid = '.intval($uidR));
+			while ($row2 = $res2->fetch_assoc()){
+				$fresult['results'][$row2['uid']] = $row2['submissionCode'];
+			}
 		}
 		return $fresult;
 	}

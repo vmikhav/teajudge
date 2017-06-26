@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_POST['lang']) || !isset($_POST['lid']) || !isset($_POST['code']) || !isset($_POST['task']) || !isset($_POST['ranges'])){die();}
+if (!isset($_POST['lang']) || !isset($_POST['lid']) || !isset($_POST['code']) || !isset($_POST['task']) || !isset($_POST['ranges']) || !isset($_POST['history']) ){die();}
 
 $tid = intval($_POST['task']);
 $lid = intval($_POST['lid']);
@@ -36,7 +36,7 @@ if (!$model->isTaskAvailable($tid, $uid)){
 
 $task = $model->getTaskContent($tid);
 
-$saveData = array('ranges' => $_POST['ranges'], 'code' => $_POST['code'], 'lid' => $lid);
+$saveData = array('ranges' => $_POST['ranges'], 'code' => $_POST['code'], 'lid' => $lid, "history" => $_POST['history']);
 $task['testCount'] = intval($task['testCount']);
 $vid = intval($task['vid']);
 

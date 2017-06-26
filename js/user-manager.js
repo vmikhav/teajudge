@@ -7,12 +7,19 @@ $('input[type=radio][name=chkg]').click(function(){
 });
 $('input.row-checkbox').mousedown(function(e){
 	e.preventDefault();
-	$(this).prop('checked', !($(this)[0].checked));
+	if ($(this).parent().parent().parent().attr("uid") == 1){
+		$(this).prop('checked', 0);
+	}
+	else{
+		$(this).prop('checked', !($(this)[0].checked));
+	}
 });
 
 $('.ulist tr').click(function(){
 	var el = $(this).find('.row-checkbox');
-	if ($(this).attr("uid") == 1){return;}
+	if ($(this).attr("uid") == 1){
+		$(el).prop('checked', 0); return;
+	}
 	$(el).prop('checked', !($(el)[0].checked));
 	selectedUserCount = $('input.row-checkbox:checked').length;
 	$('#user-props').toggle(selectedUserCount>0);

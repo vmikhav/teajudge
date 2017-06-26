@@ -72,4 +72,7 @@ define('OUTPUT', 'Виведення');
 define('TASK_CLOSED', 'Завдання вже закрите');
 define('LONG_CODE', 'Код занадто довгий');
 
+define('COMPARE', 'Порівняння');
+define('NODIFF', 'Код ідентичний');
+
 ?>
