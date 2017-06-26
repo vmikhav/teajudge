@@ -184,7 +184,7 @@ function showStatistic(data, type, isAuthor, id) {
 		});
 
 		function playback(){
-			if (frame > currHistory.length) {frame = 0;}
+			if (frame >= currHistory.length) {frame = 0;}
 			$("#framebutton.fa-play-circle").removeClass("fa-play-circle").addClass("fa-pause-circle");
 			$("#framerange").slider('value', frame); displayStep(frame); frame++;
 			interval = setInterval(function(){
