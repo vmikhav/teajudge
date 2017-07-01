@@ -1,1 +1,30 @@
+title: TeaJudge
+description: Web environment for programming skills assessment.
+avatar: "./favicon.png"
+show_downloads: true
 theme: jekyll-theme-minimal
+
+navbar-links:
+  Home: ""
+  Languages:
+    - English: "getstarted"
+    - Українська: "README.uk_UA.html"
+    - Русский: "README.ru_RU.html"
+
+author:
+  name: Volodymyr Mikhav
+  email: "mihaw.wolodymyr@gmail.com"
+  facebook: "v.mikhav"
+  github: sungmaster
+  
+footer-links-active:
+  rss: false
+  facebook: true
+  email: true
+  github: true
+  
+share-links-active:
+  twitter: true
+  facebook: true
+  google: false
+  linkedin: false
